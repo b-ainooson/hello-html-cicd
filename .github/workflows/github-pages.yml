@@ -2,8 +2,7 @@ name: Deploy static content to Pages
 
 on:
   push:
-    branches:
-      - main  # or 'master' if that’s your default
+    branches: [main]
 
 permissions:
   contents: read
@@ -14,16 +13,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Build site
-        run: |
-          npm install
-          npm run build
+      - name: Upload website content
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: .  # Change this if your HTML files are in a folder like 'public'
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build  # <- change to dist or public if needed
+        uses: actions/deploy-pages@v2
+
